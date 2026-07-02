@@ -23,7 +23,7 @@ mongoose.connect(dbURI)
 // sandbox routes testing
 app.get('/add-recipe', (req, res) => {
     const recipe = new Recipe({
-        title: 'testing recipe 1',
+        title: 'testing recipe 3',
         snippet: 'testing snippet',
         body: 'testing body'
     });
