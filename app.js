@@ -20,59 +20,27 @@ mongoose.connect(dbURI)
     .then(result => app.listen(3000))
     .catch(err => console.log(err));
 
-// sandbox routes testing
-app.get('/add-recipe', (req, res) => {
-    const recipe = new Recipe({
-        title: 'testing recipe 3',
-        snippet: 'testing snippet',
-        body: 'testing body'
-    });
-    recipe.save()
-        .then(result => {
-            res.send(result);
-        })
-        .catch(err => {
-            console.log(err);
-        });
-});
-
-app.get('/all-recipes', (req, res) => {
-    Recipe.find()
-        .then((result) => {
-            res.send(result);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-
-app.get('/single-recipe', (req, res) => {
-    Recipe.findById('6a45ed8e4acb610363e0a20a')
-        .then((result) => {
-            res.send(result);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-
 // routing and rendering
 app.get('/', (req, res) => {
-    const recipes = [
-    {title: 'Arc Reactor Energy Bites', snippet: 'No‑bake oatmeal protein balls packed with peanut butter and honey. The snack that keeps your core running at 100%.'},
-    {title: 'Repulsor Blast Spicy Wings', snippet: 'Crispy chicken wings tossed in a fiery sriracha‑honey glaze. One bite and you\'ll feel the power of a max‑output palm blast.'},
-    {title: 'J.A.R.V.I.S. Sunday Gravy', snippet: 'Slow‑simmered tomato and meat sauce that practically cooks itself. Just set it and let your kitchen AI handle the rest.'},
-    {title: 'Stark Industries Carbonara', snippet: 'Creamy, no‑cream carbonara with crispy pancetta and pecorino. High‑tech technique, old‑world soul.'},
-    {title: 'House Party Protocol Sliders', snippet: 'Mini beef sliders with caramelized onions and a secret sauce. Because every great party needs backup (and backups of backups).'}
-    ];
-    res.render('index', { title: 'Home', recipes: recipes });
+    res.redirect('/recipe');
 });
 
 app.get('/about', (req, res) => {
     res.render('about', { title: 'About'});
 });
 
-app.get('/blogs/create', (req, res) => {
+// recipe routes
+app.get('/recipe', (req, res) => {
+    Recipe.find().sort({ createdAt: -1 })
+        .then(result => {
+            res.render('index', { title: 'All Recipes', recipes: result });
+        })
+        .catch(err => {
+            console.log(err);
+        });
+});
+
+app.get('/recipe/create', (req, res) => {
     res.render('create', { title: 'Create A New Recipe'});
 });
 
